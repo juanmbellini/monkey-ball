@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// The game controller.
@@ -10,17 +11,46 @@ public class GameController : MonoBehaviour {
     private static GameController _instance;
 
     /// <summary>
-    /// The score manager, which is in charge of saving score stuff.
+    /// The score manager.
     /// </summary>
     private ScoreManager _scoreManager;
 
+    /// <summary>
+    /// The lives manager.
+    /// </summary>
+    private LivesManager _livesManager;
+
+    /// <summary>
+    /// The ground controller (which provides the ground height, in order to calculate the losing height).
+    /// </summary>
+    private GroundController _groundController;
+
+    /// <summary>
+    /// Ball controller (used to reborn the player).
+    /// </summary>
+    private BallController _ballController;
+
+
+    /// <summary>
+    /// Relative losing height (must be positive).
+    /// Note that, depending on the ground, it might have to be adjusted to avoid being moved to the min. height
+    /// due to rotations.
+    /// </summary>
+    [SerializeField] private float _relativeLoseHeight = 10f;
+
     private void Awake() {
         _scoreManager = FindObjectOfType<ScoreManager>();
+        _livesManager = FindObjectOfType<LivesManager>();
+        _groundController = FindObjectOfType<GroundController>();
+        _ballController = FindObjectOfType<BallController>();
+//        _pillsManager = FindObjectOfType<PillsManager>();
 
         // Load only if not already loaded
         if (_instance == null) {
             _instance = this;
             DontDestroyOnLoad(_scoreManager);
+            DontDestroyOnLoad(_livesManager);
+            DontDestroyOnLoad(_ballController);
         }
         else {
             Destroy(this);
@@ -36,16 +66,48 @@ public class GameController : MonoBehaviour {
     }
 
     /// <summary>
+    /// Indicates the min. height the player can be (in order to be considered alive).
+    /// </summary>
+    /// <returns></returns>
+    public float GetLosingHeight() {
+        return _groundController.GroundHeight - _relativeLoseHeight;
+    }
+
+    /// <summary>
     /// Notifies this game controller that a score was performed.
     /// </summary>
     public void Score() {
+        Debug.Log("Player has earned one point.");
         _scoreManager.AddScore(1); // TODO: remove magic number
+        // TODO: check if there are more pills to be collected (if no more pills, load win scene).
     }
 
     /// <summary>
     /// Notifies this game controller that the player has lost.
     /// </summary>
     public void Lose() {
-        _scoreManager.LoseLife();
+        StartCoroutine(Die());
+        Debug.Log("Started Die process");
+    }
+
+
+    /// <summary>
+    /// The dying process.
+    /// </summary>
+    /// <returns>IEnumerator for waiting an amount of time</returns>
+    private IEnumerator Die() {
+        yield return new WaitForSeconds(1f); // Wait some time before executiong the die process.
+        Debug.Log("Player has lost one life.");
+        _livesManager.LoseLife();
+        // TODO: notify UI, then restart if there are lives remaining.
+        // TODO: Maybe make camera stop following the player?
+        if (_livesManager.NoMoreLives()) {
+            Debug.Log("Game Over");
+            // TODO: load game over scene
+        }
+        else {
+            _groundController.RestartGround();
+            _ballController.Reborn();
+        }
     }
 }

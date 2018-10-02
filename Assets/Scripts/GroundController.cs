@@ -5,11 +5,6 @@
 /// </summary>
 public class GroundController : MonoBehaviour {
     /// <summary>
-    /// The rotation speed.
-    /// </summary>
-    [SerializeField] private float _speed = 1.0f;
-
-    /// <summary>
     /// The min. rotation in the x axis.
     /// </summary>
     private const float MinRotX = -0.1f;
@@ -29,8 +24,31 @@ public class GroundController : MonoBehaviour {
     /// </summary>
     private const float MaxRotZ = 0.1f;
 
+    /// <summary>
+    /// Initial rotation (i.e used for restarting).
+    /// </summary>
+    private Quaternion _rotation;
+
+    /// <summary>
+    /// Initial local rotation (i.e used for restarting).
+    /// </summary>
+    private Quaternion _localRotation;
+
+    /// <summary>
+    /// The rotation speed.
+    /// </summary>
+    [SerializeField] private float _speed = 1.0f;
+
+    /// <summary>
+    /// The starting height of the ground (i.e the height of the ground when it's not rotated).
+    /// </summary>
+    public float GroundHeight { get; private set; }
+
 
     private void Start() {
+        _rotation = transform.rotation;
+        _localRotation = transform.localRotation;
+        GroundHeight = transform.position.y;
     }
 
 
@@ -67,12 +85,21 @@ public class GroundController : MonoBehaviour {
             rotationWasTriggered = true;
         }
 
-        if (rotationWasTriggered) {
-            // First, clamp rotation values
-            newRotX = Mathf.Clamp(newRotX, MinRotX, MaxRotX);
-            newRotZ = Mathf.Clamp(newRotZ, MinRotZ, MaxRotZ);
-            // Then, assign the new rotation value.
-            transform.rotation = new Quaternion(newRotX, transform.rotation.y, newRotZ, transform.rotation.w);
+        if (!rotationWasTriggered) {
+            return;
         }
+        // First, clamp rotation values
+        newRotX = Mathf.Clamp(newRotX, MinRotX, MaxRotX);
+        newRotZ = Mathf.Clamp(newRotZ, MinRotZ, MaxRotZ);
+        // Then, assign the new rotation value.
+        transform.rotation = new Quaternion(newRotX, transform.rotation.y, newRotZ, transform.rotation.w);
+    }
+
+    /// <summary>
+    /// Restart the ground to the initial configuration.
+    /// </summary>
+    public void RestartGround() {
+        transform.localRotation = _localRotation;
+        transform.rotation = _rotation;
     }
 }
