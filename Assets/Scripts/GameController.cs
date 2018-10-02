@@ -21,6 +21,11 @@ public class GameController : MonoBehaviour {
     private LivesManager _livesManager;
 
     /// <summary>
+    /// The time manager.
+    /// </summary>
+    private TimeManager _timeManager;
+
+    /// <summary>
     /// The ground controller (which provides the ground height, in order to calculate the losing height).
     /// </summary>
     private GroundController _groundController;
@@ -43,26 +48,19 @@ public class GameController : MonoBehaviour {
         _livesManager = FindObjectOfType<LivesManager>();
         _groundController = FindObjectOfType<GroundController>();
         _ballController = FindObjectOfType<BallController>();
-//        _pillsManager = FindObjectOfType<PillsManager>();
+        _timeManager = FindObjectOfType<TimeManager>();
 
         // Load only if not already loaded
         if (_instance == null) {
             _instance = this;
-            DontDestroyOnLoad(_scoreManager);
-            DontDestroyOnLoad(_livesManager);
-            DontDestroyOnLoad(_ballController);
+//            DontDestroyOnLoad(_scoreManager);
+//            DontDestroyOnLoad(_livesManager);
+//            DontDestroyOnLoad(_timeManager);
+//            DontDestroyOnLoad(_ballController);
         }
         else {
             Destroy(this);
         }
-    }
-
-    // Use this for initialization
-    private void Start() {
-    }
-
-    // Update is called once per frame
-    private void Update() {
     }
 
     /// <summary>
@@ -90,24 +88,46 @@ public class GameController : MonoBehaviour {
         Debug.Log("Started Die process");
     }
 
+    /// <summary>
+    /// Notifies this game controller that there is no more time.
+    /// </summary>
+    public void NoMoreTime() {
+        // TODO: process no more time
+        Debug.Log("Player is out of time");
+        StartCoroutine(GameOver());
+    }
+
 
     /// <summary>
     /// The dying process.
     /// </summary>
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator Die() {
-        yield return new WaitForSeconds(1f); // Wait some time before executiong the die process.
+        _timeManager.StopTimer();
+        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
         Debug.Log("Player has lost one life.");
         _livesManager.LoseLife();
         // TODO: notify UI, then restart if there are lives remaining.
         // TODO: Maybe make camera stop following the player?
         if (_livesManager.NoMoreLives()) {
-            Debug.Log("Game Over");
-            // TODO: load game over scene
+            Debug.Log("No more lives");
+            StartCoroutine(GameOver());
         }
         else {
             _groundController.RestartGround();
             _ballController.Reborn();
+            _timeManager.ResumeTimer();
         }
+    }
+
+    /// <summary>
+    /// The game over process.
+    /// </summary>
+    /// <returns>IEnumerator for waiting an amount of time</returns>
+    private IEnumerator GameOver() {
+        _timeManager.StopTimer();
+        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
+        Debug.Log("Game over");
+        // TODO: load game over scene? Maybe load UI to restart the scene? or return to level 1?
     }
 }
