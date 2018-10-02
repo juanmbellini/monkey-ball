@@ -15,7 +15,7 @@ public class ScoreManager : MonoBehaviour {
     private int _lives;
 
 
-    void Start() {
+    private void Start() {
         _score = 0; // Start with no score
         _lives = 3; // TODO: magic number
     }

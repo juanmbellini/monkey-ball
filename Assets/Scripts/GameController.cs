@@ -1,10 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// The game controller.
+/// </summary>
 public class GameController : MonoBehaviour {
+    /// <summary>
+    /// A singleton instance of the game controller.
+    /// </summary>
     private static GameController _instance;
 
+    /// <summary>
+    /// The score manager, which is in charge of saving score stuff.
+    /// </summary>
     private ScoreManager _scoreManager;
 
     private void Awake() {
@@ -21,18 +28,23 @@ public class GameController : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start() {
-
+    private void Start() {
     }
 
     // Update is called once per frame
-    void Update() {
+    private void Update() {
     }
 
+    /// <summary>
+    /// Notifies this game controller that a score was performed.
+    /// </summary>
     public void Score() {
         _scoreManager.AddScore(1); // TODO: remove magic number
     }
 
+    /// <summary>
+    /// Notifies this game controller that the player has lost.
+    /// </summary>
     public void Lose() {
         _scoreManager.LoseLife();
     }

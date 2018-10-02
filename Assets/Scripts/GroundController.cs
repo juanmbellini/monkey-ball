@@ -1,54 +1,78 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Behaviour for the ground.
+/// </summary>
 public class GroundController : MonoBehaviour {
-    public float speed = 1.0f;
-    private float minRotX = -0.2f;
-    private float maxRotX = 0.2f;
-    private float minRotY = -0.2f;
-    private float maxRotY = 0.2f;
+    /// <summary>
+    /// The rotation speed.
+    /// </summary>
+    [SerializeField] private float _speed = 1.0f;
+
+    /// <summary>
+    /// The min. rotation in the x axis.
+    /// </summary>
+    private const float MinRotX = -0.1f;
+
+    /// <summary>
+    /// The max. rotation in the x axis.
+    /// </summary>
+    private const float MaxRotX = 0.1f;
+
+    /// <summary>
+    /// The min. rotation in the z axis.
+    /// </summary>
+    private const float MinRotZ = -0.1f;
+
+    /// <summary>
+    /// The max. rotation in the z axis.
+    /// </summary>
+    private const float MaxRotZ = 0.1f;
 
 
-    // Use this for initialization
-    void Start() {
+    private void Start() {
     }
 
-    // Update is called once per frame
-    void Update() {
-        CheckMove();
+
+    private void FixedUpdate() {
+        CheckRotation();
     }
 
-    private void CheckMove() {
-        float newRotX = transform.rotation.x;
-        float newRotZ = transform.rotation.z;
+    /// <summary>
+    /// Checks whether a rotational input was triggered.
+    /// </summary>
+    private void CheckRotation() {
+        var newRotX = transform.rotation.x;
+        var newRotZ = transform.rotation.z;
 
-        {
-            if (Input.GetKey(KeyCode.DownArrow)) {
-                // Nueva posición de X
-                newRotX = transform.rotation.x - speed * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.UpArrow)) {
-                // Nueva posición de X
-                newRotX = transform.rotation.x + speed * Time.deltaTime;
-            }
+        var rotationWasTriggered = false;
 
-            if (Input.GetKey(KeyCode.LeftArrow)) {
-                // Nueva posición de X
-                newRotZ = transform.rotation.z + speed * Time.deltaTime;
-            }
-            else if (Input.GetKey(KeyCode.RightArrow)) {
-                // Nueva posición de X
-                newRotZ = transform.rotation.z - speed * Time.deltaTime;
-            }
+        // First, check rotation in the x axis
+        if (Input.GetKey(KeyCode.DownArrow)) {
+            newRotX = transform.rotation.x - _speed * Time.deltaTime; // New rotation value for x
+            rotationWasTriggered = true;
+        }
+        else if (Input.GetKey(KeyCode.UpArrow)) {
+            newRotX = transform.rotation.x + _speed * Time.deltaTime; // New rotation value for x
+            rotationWasTriggered = true;
+        }
 
-            if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.LeftArrow) ||
-                Input.GetKey(KeyCode.RightArrow)) {
-                // Clampeo la posición a la pos mínima y máxima
-                newRotX = Mathf.Clamp(newRotX, minRotX, maxRotX);
-                newRotZ = Mathf.Clamp(newRotZ, minRotY, maxRotY);
+        // First, check rotation in the z axis
+        if (Input.GetKey(KeyCode.LeftArrow)) {
+            newRotZ = transform.rotation.z + _speed * Time.deltaTime; // New rotation value for z
+            rotationWasTriggered = true;
+        }
+        else if (Input.GetKey(KeyCode.RightArrow)) {
+            newRotZ = transform.rotation.z - _speed * Time.deltaTime; // New rotation value for z
+            rotationWasTriggered = true;
+        }
 
-                // Asigno la posición
-                transform.rotation = new Quaternion(newRotX, transform.rotation.y, newRotZ, transform.rotation.w);
-            }
+        if (rotationWasTriggered) {
+            // First, clamp rotation values
+            newRotX = Mathf.Clamp(newRotX, MinRotX, MaxRotX);
+            newRotZ = Mathf.Clamp(newRotZ, MinRotZ, MaxRotZ);
+            // Then, assign the new rotation value.
+            transform.rotation = new Quaternion(newRotX, transform.rotation.y, newRotZ, transform.rotation.w);
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Behaviour for capsules.
+/// Behaviour for pills.
 /// </summary>
-public class CapsuleBehaviour : MonoBehaviour {
+public class PillBehaviour : MonoBehaviour {
     /// <summary>
     /// Holds an instance to the game controller.
     /// </summary>
@@ -17,17 +17,17 @@ public class CapsuleBehaviour : MonoBehaviour {
     private bool _isBeingCollected;
 
     // Use this for initialization
-    void Start() {
+    private void Start() {
         _gameController = FindObjectOfType<GameController>();
         _isBeingCollected = false;
     }
 
     // Update is called once per frame
-    void Update() {
+    private void Update() {
         _isBeingCollected = false;
     }
 
-    void OnCollisionEnter(Collision other) {
+    private void OnCollisionEnter(Collision other) {
         if (other.gameObject.tag.Equals("Player")) {
             ProcessPlayerCollision();
         }
@@ -43,6 +43,6 @@ public class CapsuleBehaviour : MonoBehaviour {
         _isBeingCollected = true;
         Debug.Log("Score for the player");
         _gameController.Score();
-        Destroy(gameObject);
+        Destroy(gameObject); // TODO: destroy? or just unspawn?
     }
 }
