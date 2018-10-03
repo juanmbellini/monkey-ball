@@ -17,7 +17,7 @@ public class TimeManager : MonoBehaviour {
     /// <summary>
     /// Time remaining.
     /// </summary>
-    [SerializeField] private float _timeRemaining;
+    public float TimeRemaining { get; private set; }
 
     /// <summary>
     /// Flag indicating whether the time is on or off.
@@ -26,7 +26,7 @@ public class TimeManager : MonoBehaviour {
 
     private void Start() {
         _gameController = FindObjectOfType<GameController>();
-        _timeRemaining = _startingTime;
+        TimeRemaining = _startingTime;
         _enabled = true;
     }
 
@@ -34,8 +34,8 @@ public class TimeManager : MonoBehaviour {
         if (!_enabled) {
             return; // Do not update timer if it is not enabled
         }
-        _timeRemaining -= Time.deltaTime;
-        if (_timeRemaining <= 0) {
+        TimeRemaining -= Time.deltaTime;
+        if (TimeRemaining <= 0) {
             // If there is no time remaining, then notify the game controller about this event.
             _gameController.NoMoreTime();
         }

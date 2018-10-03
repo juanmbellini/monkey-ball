@@ -7,11 +7,11 @@ public class ScoreManager : MonoBehaviour {
     /// <summary>
     /// The actual score.
     /// </summary>
-    [SerializeField] private int _score;
+    public int Score { get; private set; }
 
 
     private void Start() {
-        _score = 0; // Start with no score
+        Score = 0; // Start with no score
     }
 
     /// <summary>
@@ -19,6 +19,6 @@ public class ScoreManager : MonoBehaviour {
     /// </summary>
     /// <param name="score">The amount of score units to be added.</param>
     public void AddScore(int score) {
-        _score += score;
+        Score += score;
     }
 }

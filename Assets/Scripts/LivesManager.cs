@@ -9,18 +9,18 @@ public class LivesManager : MonoBehaviour {
     /// <summary>
     /// The actual amount of lives remiaing the player has.
     /// </summary>
-    private int _lives;
+    public int LivesRemaining { get; private set; }
 
     // Use this for initialization
     private void Start() {
-        _lives = _startingLives; // TODO: magic number
+        LivesRemaining = _startingLives; // TODO: magic number
     }
 
     /// <summary>
     /// Makes the player lose one life (i.e it decrements by one the life value).
     /// </summary>
     public void LoseLife() {
-        _lives--;
+        LivesRemaining--;
     }
 
     /// <summary>
@@ -28,6 +28,6 @@ public class LivesManager : MonoBehaviour {
     /// </summary>
     /// <returns>true if there are no more lives remaining, or false otherwise.</returns>
     public bool NoMoreLives() {
-        return _lives < 0;
+        return LivesRemaining < 0;
     }
 }
