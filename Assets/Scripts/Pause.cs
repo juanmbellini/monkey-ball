@@ -5,7 +5,8 @@ using UnityEngine;
 public class Pause : MonoBehaviour {
 
 	[SerializeField] private GameObject pausePanel;
-	
+
+	public static bool GamePaused;
 	
 	void Start()
 	{
@@ -13,28 +14,42 @@ public class Pause : MonoBehaviour {
 	}
 	void Update()
 	{
-		if(Input.GetKeyDown (KeyCode.Escape)) 
+		Debug.Log(Time.timeScale);
+		if (Input.GetKeyDown(KeyCode.Escape))
 		{
-			if (!pausePanel.activeInHierarchy) 
+			if(!GamePaused)
 			{
 				PauseGame();
 			}
-			if (pausePanel.activeInHierarchy) 
+			else
 			{
-				ContinueGame();   
-			}
-		} 
+				ContinueGame();
+			}	
+		}
 	}
+
+	private void FixedUpdate()
+	{
+		
+		
+	}
+
 	private void PauseGame()
 	{
-		Time.timeScale = 0;
+		Debug.Log("DAAAAAALE");
 		pausePanel.SetActive(true);
+		Time.timeScale = 0;
+		GamePaused = true;
+
 		//Disable scripts that still work while timescale is set to 0
 	} 
 	private void ContinueGame()
 	{
-		Time.timeScale = 1;
+		Debug.Log("Tokio tomare");
 		pausePanel.SetActive(false);
+		Time.timeScale = 1;
+		GamePaused = false;
+
 		//enable the scripts again
 	}
 }
