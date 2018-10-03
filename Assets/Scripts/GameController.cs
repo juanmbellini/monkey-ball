@@ -56,10 +56,6 @@ public class GameController : MonoBehaviour {
         // Load only if not already loaded
         if (_instance == null) {
             _instance = this;
-//            DontDestroyOnLoad(_scoreManager);
-//            DontDestroyOnLoad(_livesManager);
-//            DontDestroyOnLoad(_timeManager);
-//            DontDestroyOnLoad(_ballController);
         }
         else {
             Destroy(this);
@@ -72,6 +68,18 @@ public class GameController : MonoBehaviour {
     /// <returns></returns>
     public float GetLosingHeight() {
         return _groundController.GroundHeight - _relativeLoseHeight;
+    }
+
+    public int GetScore() {
+        return _scoreManager.Score;
+    }
+
+    public int GetLives() {
+        return _livesManager.LivesRemaining;
+    }
+
+    public float GetTimeRemaining() {
+        return _timeManager.TimeRemaining;
     }
 
     /// <summary>

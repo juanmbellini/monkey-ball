@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1081,7 +1081,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &870748477 stripped
 Transform:
@@ -1358,7 +1358,7 @@ GameObject:
   - component: {fileID: 1135798006}
   - component: {fileID: 1135798005}
   m_Layer: 5
-  m_Name: Lifes
+  m_Name: Lives
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1562,7 +1562,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1180572627 stripped
 Transform:
@@ -1992,7 +1992,7 @@ Transform:
   - {fileID: 91815149}
   - {fileID: 926214942}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1644978789 stripped
 Transform:
@@ -2080,9 +2080,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e32601975a15e247a2515379adec4f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tText: {fileID: 888023257}
-  sText: {fileID: 1868416409}
-  lText: {fileID: 1135798005}
+  _timeText: {fileID: 888023257}
+  _scoreText: {fileID: 1868416409}
+  _livesText: {fileID: 1135798005}
 --- !u!4 &1664735493
 Transform:
   m_ObjectHideFlags: 0
@@ -2094,7 +2094,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1684431541 stripped
 Transform:
@@ -2594,7 +2594,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1949367211
 Prefab:

@@ -1,1 +1,46 @@
-﻿using System.Collections;using System.Collections.Generic;using TMPro;using UnityEngine;using UnityEngine.SocialPlatforms.Impl;public class UIController : MonoBehaviour{	[SerializeField] TextMeshProUGUI tText;	[SerializeField] TextMeshProUGUI sText;	[SerializeField] TextMeshProUGUI lText;	private LivesManager lManager;	private ScoreManager sManager;	private TimeManager tManager;	// Use this for initialization	void Awake () {		lManager = FindObjectOfType<LivesManager>();		sManager = FindObjectOfType<ScoreManager>();		tManager = FindObjectOfType<TimeManager>();	}		// Update is called once per frame	void Update ()	{		tText.SetText("Time\n" + (int) tManager.TimeRemaining);		sText.SetText("Score\n" + sManager.Score);		lText.SetText("Lifes " + lManager.LivesRemaining);	}}
+﻿using TMPro;
+using UnityEngine;
+
+/// <summary>
+/// Controller class for the UI.
+/// </summary>
+public class UIController : MonoBehaviour {
+    /// <summary>
+    /// Textfield for time.
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _timeText;
+
+    /// <summary>
+    /// Textfield for score.
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _scoreText;
+
+    /// <summary>
+    /// Textfield for lives.
+    /// </summary>
+    [SerializeField] private TextMeshProUGUI _livesText;
+
+    /// <summary>
+    /// A reference to the game controller, in order to notify out of time.
+    /// </summary>
+    private GameController _gameController;
+
+    // Use this for initialization
+    private void Start() {
+        _gameController = FindObjectOfType<GameController>();
+    }
+
+    // Update is called once per frame
+    private void Update() {
+        UpdateUI();
+    }
+
+    /// <summary>
+    /// Updates the UI.
+    /// </summary>
+    private void UpdateUI() {
+        _timeText.SetText("Time\n" + (int) _gameController.GetTimeRemaining());
+        _scoreText.SetText("Score\n" + _gameController.GetScore());
+        _livesText.SetText("Lives " + _gameController.GetLives());
+    }
+}
