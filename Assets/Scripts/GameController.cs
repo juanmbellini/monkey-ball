@@ -25,6 +25,8 @@ public class GameController : MonoBehaviour {
     /// </summary>
     private TimeManager _timeManager;
 
+    private PillsManager _pillsManager;
+
     /// <summary>
     /// The ground controller (which provides the ground height, in order to calculate the losing height).
     /// </summary>
@@ -46,9 +48,10 @@ public class GameController : MonoBehaviour {
     private void Awake() {
         _scoreManager = FindObjectOfType<ScoreManager>();
         _livesManager = FindObjectOfType<LivesManager>();
+        _timeManager = FindObjectOfType<TimeManager>();
+        _pillsManager = FindObjectOfType<PillsManager>();
         _groundController = FindObjectOfType<GroundController>();
         _ballController = FindObjectOfType<BallController>();
-        _timeManager = FindObjectOfType<TimeManager>();
 
         // Load only if not already loaded
         if (_instance == null) {
@@ -78,6 +81,11 @@ public class GameController : MonoBehaviour {
         Debug.Log("Player has earned one point.");
         _scoreManager.AddScore(1); // TODO: remove magic number
         // TODO: check if there are more pills to be collected (if no more pills, load win scene).
+        if (_pillsManager.PillsRemaining()) {
+            return; // Do nothing else if there are pills remaining
+        }
+        Debug.Log("All pills collected");
+        StartCoroutine(Win());
     }
 
     /// <summary>
@@ -97,6 +105,16 @@ public class GameController : MonoBehaviour {
         StartCoroutine(GameOver());
     }
 
+    /// <summary>
+    /// The winning process.
+    /// </summary>
+    /// <returns>IEnumerator for waiting an amount of time</returns>
+    private IEnumerator Win() {
+        _timeManager.StopTimer();
+        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
+        Debug.Log("Player win");
+        // TODO: process win stuff
+    }
 
     /// <summary>
     /// The dying process.
@@ -104,7 +122,7 @@ public class GameController : MonoBehaviour {
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator Die() {
         _timeManager.StopTimer();
-        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
+        yield return new WaitForSeconds(1f); // Wait some time before executiong the die process.
         Debug.Log("Player has lost one life.");
         _livesManager.LoseLife();
         // TODO: notify UI, then restart if there are lives remaining.
