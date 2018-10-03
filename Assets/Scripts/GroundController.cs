@@ -7,22 +7,22 @@ public class GroundController : MonoBehaviour {
     /// <summary>
     /// The min. rotation in the x axis.
     /// </summary>
-    private const float MinRotX = -0.1f;
+    private const float MinRotX = -0.15f;
 
     /// <summary>
     /// The max. rotation in the x axis.
     /// </summary>
-    private const float MaxRotX = 0.1f;
+    private const float MaxRotX = 0.15f;
 
     /// <summary>
     /// The min. rotation in the z axis.
     /// </summary>
-    private const float MinRotZ = -0.1f;
+    private const float MinRotZ = -0.15f;
 
     /// <summary>
     /// The max. rotation in the z axis.
     /// </summary>
-    private const float MaxRotZ = 0.1f;
+    private const float MaxRotZ = 0.15f;
 
     /// <summary>
     /// Initial rotation (i.e used for restarting).
@@ -37,7 +37,7 @@ public class GroundController : MonoBehaviour {
     /// <summary>
     /// The rotation speed.
     /// </summary>
-    [SerializeField] private float _speed = 1.0f;
+    [SerializeField] private float _speed = 0.25f;
 
     /// <summary>
     /// The starting height of the ground (i.e the height of the ground when it's not rotated).
