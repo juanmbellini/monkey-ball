@@ -42,7 +42,7 @@ public class PillBehaviour : MonoBehaviour {
         }
         _isBeingCollected = true;
         Debug.Log("Score for the player");
+        gameObject.SetActive(false);
         _gameController.Score();
-        Destroy(gameObject); // TODO: destroy? or just unspawn?
     }
 }

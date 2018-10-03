@@ -1043,6 +1043,46 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4390327255456242, guid: 8e4740a4d8dde41b38de61b58751961d,
     type: 2}
   m_PrefabInternal: {fileID: 1763727739}
+--- !u!1 &857601381
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 857601383}
+  - component: {fileID: 857601382}
+  m_Layer: 0
+  m_Name: PillsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &857601382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 857601381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05479d8ac777e4d08b8726106196f461, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &857601383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 857601381}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.17583178, y: 8.847068, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &870748477 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4390327255456242, guid: 8e4740a4d8dde41b38de61b58751961d,

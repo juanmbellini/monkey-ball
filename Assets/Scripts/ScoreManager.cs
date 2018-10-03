@@ -9,7 +9,6 @@ public class ScoreManager : MonoBehaviour {
     /// </summary>
     public int Score { get; private set; }
 
-
     private void Start() {
         Score = 0; // Start with no score
     }
