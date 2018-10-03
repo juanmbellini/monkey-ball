@@ -37,7 +37,7 @@ public class TimeManager : MonoBehaviour {
         TimeRemaining -= Time.deltaTime;
         if (TimeRemaining <= 0) {
             // If there is no time remaining, then notify the game controller about this event.
-            _gameController.NoMoreTime();
+            _gameController.NotifyNoMoreTime();
         }
     }
 

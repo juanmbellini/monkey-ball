@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// The game controller.
@@ -25,7 +26,16 @@ public class GameController : MonoBehaviour {
     /// </summary>
     private TimeManager _timeManager;
 
+    /// <summary>
+    /// The pills manager.
+    /// </summary>
     private PillsManager _pillsManager;
+
+    /// <summary>
+    /// The UI Controller (used to notify time's up, game over, and win events).
+    /// </summary>
+    private UIController _uIController;
+
 
     /// <summary>
     /// The ground controller (which provides the ground height, in order to calculate the losing height).
@@ -52,6 +62,7 @@ public class GameController : MonoBehaviour {
         _pillsManager = FindObjectOfType<PillsManager>();
         _groundController = FindObjectOfType<GroundController>();
         _ballController = FindObjectOfType<BallController>();
+        _uIController = FindObjectOfType<UIController>();
 
         // Load only if not already loaded
         if (_instance == null) {
@@ -88,7 +99,6 @@ public class GameController : MonoBehaviour {
     public void Score() {
         Debug.Log("Player has earned one point.");
         _scoreManager.AddScore(1); // TODO: remove magic number
-        // TODO: check if there are more pills to be collected (if no more pills, load win scene).
         if (_pillsManager.PillsRemaining()) {
             return; // Do nothing else if there are pills remaining
         }
@@ -107,10 +117,9 @@ public class GameController : MonoBehaviour {
     /// <summary>
     /// Notifies this game controller that there is no more time.
     /// </summary>
-    public void NoMoreTime() {
-        // TODO: process no more time
-        Debug.Log("Player is out of time");
-        StartCoroutine(GameOver());
+    public void NotifyNoMoreTime() {
+        _timeManager.StopTimer();
+        StartCoroutine(NoMoreTime());
     }
 
     /// <summary>
@@ -119,9 +128,11 @@ public class GameController : MonoBehaviour {
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator Win() {
         _timeManager.StopTimer();
-        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
         Debug.Log("Player win");
-        // TODO: process win stuff
+        _uIController.NotifyWin();
+        // TODO: freeze all movements?
+        yield return new WaitForSeconds(2f); // Wait some time before executiong the win process.
+        FinishGame();
     }
 
     /// <summary>
@@ -133,8 +144,6 @@ public class GameController : MonoBehaviour {
         yield return new WaitForSeconds(1f); // Wait some time before executiong the die process.
         Debug.Log("Player has lost one life.");
         _livesManager.LoseLife();
-        // TODO: notify UI, then restart if there are lives remaining.
-        // TODO: Maybe make camera stop following the player?
         if (_livesManager.NoMoreLives()) {
             Debug.Log("No more lives");
             StartCoroutine(GameOver());
@@ -147,13 +156,32 @@ public class GameController : MonoBehaviour {
     }
 
     /// <summary>
+    /// The no more time process.
+    /// </summary>
+    /// <returns>IEnumerator for waiting an amount of time</returns>
+    private IEnumerator NoMoreTime() {
+        Debug.Log("Player is out of time");
+        _uIController.NotifyTimeUp();
+        yield return new WaitForSeconds(2f); // Wait some time before executiong the no more time process.
+        StartCoroutine(GameOver());
+    }
+
+    /// <summary>
     /// The game over process.
     /// </summary>
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator GameOver() {
         _timeManager.StopTimer();
-        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
         Debug.Log("Game over");
-        // TODO: load game over scene? Maybe load UI to restart the scene? or return to level 1?
+        _uIController.NotifyGameOver();
+        yield return new WaitForSeconds(2f); // Wait some time before executiong the die process.
+        FinishGame();
+    }
+
+    /// <summary>
+    /// Finishes the game.
+    /// </summary>
+    private static void FinishGame() {
+        SceneManager.LoadScene("MainMenu");
     }
 }
