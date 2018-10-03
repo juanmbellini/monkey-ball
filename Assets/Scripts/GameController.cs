@@ -36,6 +36,11 @@ public class GameController : MonoBehaviour {
     /// </summary>
     private UIController _uIController;
 
+    /// <summary>
+    /// The camera controller.
+    /// </summary>
+    private CamaraController _cameraController;
+
 
     /// <summary>
     /// The ground controller (which provides the ground height, in order to calculate the losing height).
@@ -55,6 +60,8 @@ public class GameController : MonoBehaviour {
     /// </summary>
     [SerializeField] private float _relativeLoseHeight = 10f;
 
+    private bool _gameIsFinished;
+
     private void Awake() {
         _scoreManager = FindObjectOfType<ScoreManager>();
         _livesManager = FindObjectOfType<LivesManager>();
@@ -63,6 +70,7 @@ public class GameController : MonoBehaviour {
         _groundController = FindObjectOfType<GroundController>();
         _ballController = FindObjectOfType<BallController>();
         _uIController = FindObjectOfType<UIController>();
+        _cameraController = FindObjectOfType<CamaraController>();
 
         // Load only if not already loaded
         if (_instance == null) {
@@ -71,6 +79,10 @@ public class GameController : MonoBehaviour {
         else {
             Destroy(this);
         }
+    }
+
+    private void Start() {
+        _gameIsFinished = false;
     }
 
     /// <summary>
@@ -97,6 +109,9 @@ public class GameController : MonoBehaviour {
     /// Notifies this game controller that a score was performed.
     /// </summary>
     public void Score() {
+        if (_gameIsFinished) {
+            return;
+        }
         Debug.Log("Player has earned one point.");
         _scoreManager.AddScore(1); // TODO: remove magic number
         if (_pillsManager.PillsRemaining()) {
@@ -110,6 +125,9 @@ public class GameController : MonoBehaviour {
     /// Notifies this game controller that the player has lost.
     /// </summary>
     public void Lose() {
+        if (_gameIsFinished) {
+            return;
+        }
         StartCoroutine(Die());
         Debug.Log("Started Die process");
     }
@@ -118,6 +136,9 @@ public class GameController : MonoBehaviour {
     /// Notifies this game controller that there is no more time.
     /// </summary>
     public void NotifyNoMoreTime() {
+        if (_gameIsFinished) {
+            return;
+        }
         _timeManager.StopTimer();
         StartCoroutine(NoMoreTime());
     }
@@ -127,11 +148,11 @@ public class GameController : MonoBehaviour {
     /// </summary>
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator Win() {
+        _gameIsFinished = true;
         _timeManager.StopTimer();
         Debug.Log("Player win");
         _uIController.NotifyWin();
-        // TODO: freeze all movements?
-        yield return new WaitForSeconds(2f); // Wait some time before executiong the win process.
+        yield return new WaitForSeconds(1f); // Wait some time before executiong the win process.
         FinishGame();
     }
 
@@ -152,6 +173,7 @@ public class GameController : MonoBehaviour {
             _groundController.RestartGround();
             _ballController.Reborn();
             _timeManager.ResumeTimer();
+            _cameraController.RestartCamera();
         }
     }
 
@@ -160,6 +182,7 @@ public class GameController : MonoBehaviour {
     /// </summary>
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator NoMoreTime() {
+        _gameIsFinished = true;
         Debug.Log("Player is out of time");
         _uIController.NotifyTimeUp();
         yield return new WaitForSeconds(2f); // Wait some time before executiong the no more time process.
@@ -171,6 +194,7 @@ public class GameController : MonoBehaviour {
     /// </summary>
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator GameOver() {
+        _gameIsFinished = true; // Sanity check (should not enter here with this in false, but just in case).
         _timeManager.StopTimer();
         Debug.Log("Game over");
         _uIController.NotifyGameOver();
