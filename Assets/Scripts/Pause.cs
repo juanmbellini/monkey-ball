@@ -1,55 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Pause : MonoBehaviour {
+    /// <summary>
+    /// Game object for the pause message.
+    /// </summary>
+    [SerializeField] private GameObject pausePanel;
 
-	[SerializeField] private GameObject pausePanel;
+    /// <summary>
+    /// Flag indicating the game is paused.
+    /// </summary>
+    public static bool GamePaused;
 
-	public static bool GamePaused;
-	
-	void Start()
-	{
-		pausePanel.SetActive(false);
-	}
-	void Update()
-	{
-		Debug.Log(Time.timeScale);
-		if (Input.GetKeyDown(KeyCode.Escape))
-		{
-			if(!GamePaused)
-			{
-				PauseGame();
-			}
-			else
-			{
-				ContinueGame();
-			}	
-		}
-	}
 
-	private void FixedUpdate()
-	{
-		
-		
-	}
+    private void Start() {
+        pausePanel.SetActive(false);
+    }
 
-	private void PauseGame()
-	{
-		Debug.Log("DAAAAAALE");
-		pausePanel.SetActive(true);
-		Time.timeScale = 0;
-		GamePaused = true;
+    private void Update() {
+        if (!Input.GetKeyDown(KeyCode.Escape)) {
+            return;
+        }
+        if (GamePaused) {
+            ContinueGame();
+        }
+        else {
+            PauseGame();
+        }
+    }
 
-		//Disable scripts that still work while timescale is set to 0
-	} 
-	private void ContinueGame()
-	{
-		Debug.Log("Tokio tomare");
-		pausePanel.SetActive(false);
-		Time.timeScale = 1;
-		GamePaused = false;
+    private void FixedUpdate() {
+    }
 
-		//enable the scripts again
-	}
+    /// <summary>
+    /// Pauses the game.
+    /// </summary>
+    private void PauseGame() {
+        // Disable scripts that still work while timescale is set to 0
+        pausePanel.SetActive(true);
+        Time.timeScale = 0;
+        GamePaused = true;
+    }
+
+    /// <summary>
+    /// Unpauses the game.
+    /// </summary>
+    private void ContinueGame() {
+        // Enable the scripts again
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
+        GamePaused = false;
+    }
 }

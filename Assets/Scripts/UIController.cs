@@ -31,7 +31,6 @@ public class UIController : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI _gameResultMessage;
 
 
- 
     /// <summary>
     /// A reference to the game controller, in order to notify out of time.
     /// </summary>
@@ -92,5 +91,4 @@ public class UIController : MonoBehaviour {
     private void GameHasFinished() {
         _gameResultMessage.gameObject.SetActive(true);
     }
-    
 }

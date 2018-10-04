@@ -12,17 +12,9 @@ public class LivesManager : MonoBehaviour {
     public int LivesRemaining { get; private set; }
 
     // Use this for initialization
-    private void Start()
-    {
-        int lives = PlayerPrefs.GetInt("Lives");
-        if (lives != 0)
-        {
-            LivesRemaining = lives;
-        }
-        else
-        {
-        LivesRemaining = _startingLives; // TODO: magic number           
-        }
+    private void Start() {
+        var lives = PlayerPrefs.GetInt("Lives");
+        LivesRemaining = lives != 0 ? lives : _startingLives;
     }
 
     /// <summary>
