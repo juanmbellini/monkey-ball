@@ -148,12 +148,23 @@ public class GameController : MonoBehaviour {
     /// </summary>
     /// <returns>IEnumerator for waiting an amount of time</returns>
     private IEnumerator Win() {
+        PlayerPrefs.SetInt("Lives", GetLives());
+        PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
         _gameIsFinished = true;
         _timeManager.StopTimer();
         Debug.Log("Player win");
         _uIController.NotifyWin();
         yield return new WaitForSeconds(1f); // Wait some time before executiong the win process.
-        FinishGame();
+        if (SceneManager.GetActiveScene().name == "Level3")
+        {
+            FinishGame();    
+        }
+        else
+        {
+            string newLevel = "Level" + PlayerPrefs.GetInt("Level").ToString();
+            SceneManager.LoadScene(newLevel);
+        }
+        
     }
 
     /// <summary>
